@@ -1,0 +1,62 @@
+stages:
+- deploy
+
+deploy-dev:
+  stage: deploy
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    GIT_SUBMODULE_STRATEGY: recursive
+    VAULT_KEY: dev-deployer-key-roleset
+    CLUSTER_NAME: crmsuite-backend-services-dev
+    CLOUD_SDK_VERSION: 198.0.0
+    VAULT_VERSION: 0.10.3
+    GOOGLE_APPLICATION_CREDENTIALS: /keyfile.json
+    KUBE_VERSION: 1.9.6
+    REGISTRY: gcr.io/crmsuite-dev-203618/frontend/integratedwebsites
+    PROJECT: crmsuite-dev-203618
+    DEPLOYMENT_NAME: integratedwebsites
+    CONTAINER_NAME: integratedwebsites
+    NAMESPACE: frontend
+    CLUSTER_ZONE: us-east1-b
+  services:
+  - docker:dind
+  only:
+  - development
+  before_script:
+  - export DEPLOY_TAG=$(date +%s)
+  - apk update
+  - apk add --no-cache wget curl ca-certificates python py-crcmod bash libc6-compat openssh-client git unzip
+  script:
+  - wget https://storage.googleapis.com/crmsuite-ops/crmsuite_k8s_deploy_script && chmod +x crmsuite_k8s_deploy_script
+  - ./crmsuite_k8s_deploy_script
+
+deploy-prod:
+  stage: deploy
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    GIT_SUBMODULE_STRATEGY: recursive
+    VAULT_KEY: prod-deployer-key-roleset
+    CLUSTER_NAME: crmsuite-backend-services
+    CLOUD_SDK_VERSION: 198.0.0
+    VAULT_VERSION: 0.10.1
+    GOOGLE_APPLICATION_CREDENTIALS: /keyfile.json
+    KUBE_VERSION: 1.9.6
+    REGISTRY: gcr.io/crmsuite-1253/frontend/integratedwebsites
+    PROJECT: crmsuite-1253
+    DEPLOYMENT_NAME: integratedwebsites
+    CONTAINER_NAME: integratedwebsites
+    NAMESPACE: frontend
+    CLUSTER_ZONE: us-east1-b
+  services:
+  - docker:dind
+  only:
+  - master
+  before_script:
+  - export DEPLOY_TAG=$(date +%s)
+  - apk update
+  - apk add --no-cache wget curl ca-certificates python py-crcmod bash libc6-compat openssh-client git unzip
+  script:
+  - wget https://storage.googleapis.com/crmsuite-ops/crmsuite_k8s_deploy_script && chmod +x crmsuite_k8s_deploy_script
+  - ./crmsuite_k8s_deploy_script
