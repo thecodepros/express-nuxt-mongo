@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'universal',
   /*
   ** Headers of the page
   */
@@ -10,16 +11,33 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
+   /*
+  ** Customize the progress-bar color
+  */
+
+ loading: { color: '#fff' },
   /*
   ** Global CSS
   */
+
   css: ['~/assets/css/main.css'],
+
+  /*
+  ** Plugins to load before mounting the App
+  */
+
+ plugins: [
+  '@/plugins/vuetify'
+],
+
   /*
   ** Add axios globally
   */
+ 
   build: {
     vendor: ['axios'],
     /*

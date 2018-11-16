@@ -1,4 +1,14 @@
 const express = require('express')
+const mongoose = require('mongoose')
+
+// mongoose.connect()
+// .then(() => console.log('MongoDB Connected...'))
+// .catch(err => console.log(err));
+
+// // //Load Idea Model 
+// require('./models/Idea')
+// const Idea = mongoose.model('ideas');
+
 
 // Create express instnace
 const app = express()
